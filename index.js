@@ -6,8 +6,8 @@ const PORT = process.env.PORT || 3000;
 
 // ⚠️ Sustituye aquí por tu correo y contraseña reales de MEGA
 const storage = new Storage({
-  email: "TU_CORREO_MEGA",
-  password: "TU_CONTRASEÑA_MEGA"
+  email: "lemusdelapuertams123a@gmail.com",
+  password: "MSOS123a"
 });
 
 app.get("/", (req, res) => {
@@ -60,3 +60,4 @@ app.get("/", (req, res) => {
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Servidor corriendo en http://0.0.0.0:${PORT}`);
 });
+
