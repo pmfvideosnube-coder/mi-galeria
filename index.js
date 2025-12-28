@@ -4,9 +4,10 @@ const { Storage } = require("megajs");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// ⚠️ Aquí pones tu correo y contraseña directamente
 const storage = new Storage({
-  email: process.env.MEGA_EMAIL,
-  password: process.env.MEGA_PASSWORD
+  email: "lemusdelapuertams123a@gmail.com",
+  password: "MSOS123a"
 });
 
 app.get("/", (req, res) => {
@@ -16,7 +17,7 @@ app.get("/", (req, res) => {
       return res.send(`
         <html><body style="background:#fff0f5;font-family:sans-serif;">
           <h1 style="color:#d81b60;text-align:center;">🎀 Galería pastel 🎀</h1>
-          <p style="text-align:center;color:#333;">No se pudo conectar a MEGA. Verifica tus credenciales.</p>
+          <p style="text-align:center;color:#333;">No se pudo conectar a MEGA. Verifica tu correo y contraseña.</p>
         </body></html>
       `);
     }
@@ -25,16 +26,25 @@ app.get("/", (req, res) => {
 
     let html = `
       <html>
-      <head><meta charset="utf-8"><title>Galería pastel</title></head>
-      <body style="background:#fff0f5;font-family:sans-serif;">
-        <h1 style="color:#d81b60;text-align:center;">🎀 Galería pastel 🎀</h1>
+      <head>
+        <meta charset="utf-8">
+        <title>Galería pastel</title>
+        <style>
+          body { background:#fff0f5; font-family:sans-serif; }
+          h1 { color:#d81b60; text-align:center; }
+          .video { margin:20px; padding:10px; background:#ffffff; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+          video { width:100%; border-radius:10px; }
+        </style>
+      </head>
+      <body>
+        <h1>🎀 Galería pastel 🎀</h1>
     `;
 
     videos.forEach(v => {
       html += `
-        <div style="margin:20px;padding:10px;background:#fff;border-radius:10px;">
+        <div class="video">
           <h3>${v.name}</h3>
-          <video controls width="640">
+          <video controls>
             <source src="${v.link()}" type="video/mp4">
           </video>
         </div>
