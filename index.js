@@ -4,7 +4,7 @@ const { Storage } = require("megajs");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ⚠️ Aquí pones tu correo y contraseña directamente
+// ⚠️ Sustituye aquí tu correo y contraseña de MEGA
 const storage = new Storage({
   email: "lemusdelapuertams123a@gmail.com",
   password: "MSOS123a"
@@ -56,5 +56,7 @@ app.get("/", (req, res) => {
   });
 });
 
-app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));
-
+// Render necesita escuchar en 0.0.0.0
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Servidor corriendo en http://0.0.0.0:${PORT}`);
+});
