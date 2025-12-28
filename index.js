@@ -21,7 +21,7 @@ app.get("/videos", async (req, res) => {
   try {
     const response = await drive.files.list({
       q: "'1t2m1x_lLasgoeSpb7yzS7bF7a51VXjC29Udju7Z_8byyJcyPLG_-NILBQ39sEeGAfSI0QBDk' in parents",
-      fields: "files(id, name, createdTime, webContentLink)",
+      fields: "files(id, name, createdTime)",
       orderBy: "createdTime desc",
     });
 
@@ -113,7 +113,8 @@ app.get("/videos", async (req, res) => {
     `;
 
     files.forEach((file) => {
-      const videoUrl = file.webContentLink; // ✅ enlace correcto para reproducir
+      // ✅ Enlace correcto para reproducir en <video>
+      const videoUrl = `https://drive.google.com/uc?id=${file.id}&export=download`;
       html += `
         <div class="video-card" data-name="${file.name.toLowerCase()}">
           <h3>${file.name}</h3>
