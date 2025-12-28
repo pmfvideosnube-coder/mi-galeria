@@ -113,8 +113,7 @@ app.get("/videos", async (req, res) => {
     `;
 
     files.forEach((file) => {
-      // ✅ Enlace con alt=media (requiere token)
-      const videoUrl = `/stream/${file.id}`;
+      const videoUrl = `/stream/${file.id}`; // ✅ proxy interno
       html += `
         <div class="video-card" data-name="${file.name.toLowerCase()}">
           <h3>${file.name}</h3>
@@ -156,7 +155,7 @@ app.get("/videos", async (req, res) => {
   }
 });
 
-// Nueva ruta para servir el archivo con alt=media
+// ✅ Ruta proxy que pide el archivo a Drive y lo sirve al navegador
 app.get("/stream/:id", async (req, res) => {
   try {
     const fileId = req.params.id;
@@ -176,8 +175,3 @@ app.get("/stream/:id", async (req, res) => {
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
 });
-
-app.listen(port, () => {
-  console.log(`Servidor corriendo en http://localhost:${port}`);
-});
-
