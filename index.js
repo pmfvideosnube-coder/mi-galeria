@@ -4,32 +4,30 @@ const { Storage } = require("megajs");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ⚠️ Sustituye aquí por tu correo y contraseña reales de MEGA
+// Conectar a tu cuenta MEGA usando variables de entorno
 const storage = new Storage({
-  email: "lemusdelapuertams123a@gmail.com",
-  password: "MSOS123a"
+  email: process.env.MEGA_EMAIL,
+  password: process.env.MEGA_PASSWORD
 });
 
 app.get("/", (req, res) => {
+  // Verificar que las variables existen
+  if (!process.env.MEGA_EMAIL || !process.env.MEGA_PASSWORD) {
+    return res.send("<h1>🎀 Galería pastel 🎀</h1><p>No se configuraron credenciales MEGA.</p>");
+  }
+
   storage.login((err) => {
     if (err) {
       console.error("Error al conectar con MEGA:", err);
-      return res.send(`
-        <html><body style="background:#fff0f5;font-family:sans-serif;">
-          <h1 style="color:#d81b60;text-align:center;">🎀 Galería pastel 🎀</h1>
-          <p style="text-align:center;color:#333;">No se pudo conectar a MEGA. Verifica tu correo y contraseña.</p>
-        </body></html>
-      `);
+      return res.send("<h1>🎀 Galería pastel 🎀</h1><p>Error al conectar con MEGA.</p>");
     }
 
-    // Montar almacenamiento para acceder a los archivos
     storage.mount((err) => {
       if (err) {
         console.error("Error al montar MEGA:", err);
         return res.send("<h1>Error al montar MEGA.</h1>");
       }
 
-      // Convertir storage.files en array
       const videos = Object.values(storage.files).filter(f => f.name.endsWith(".mp4"));
 
       let html = `
@@ -69,3 +67,4 @@ app.get("/", (req, res) => {
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Servidor corriendo en http://0.0.0.0:${PORT}`);
 });
+
