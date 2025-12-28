@@ -113,8 +113,8 @@ app.get("/videos", async (req, res) => {
     `;
 
     files.forEach((file) => {
-      // ✅ Enlace correcto para reproducir en <video>
-      const videoUrl = `https://drive.google.com/uc?id=${file.id}&export=download`;
+      // ✅ Enlace con alt=media (requiere token)
+      const videoUrl = `/stream/${file.id}`;
       html += `
         <div class="video-card" data-name="${file.name.toLowerCase()}">
           <h3>${file.name}</h3>
@@ -156,6 +156,28 @@ app.get("/videos", async (req, res) => {
   }
 });
 
+// Nueva ruta para servir el archivo con alt=media
+app.get("/stream/:id", async (req, res) => {
+  try {
+    const fileId = req.params.id;
+    const driveRes = await drive.files.get(
+      { fileId, alt: "media" },
+      { responseType: "stream" }
+    );
+
+    res.setHeader("Content-Type", "video/mp4");
+    driveRes.data.pipe(res);
+  } catch (err) {
+    console.error("Error al reproducir video:", err);
+    res.status(500).send("Error al reproducir video");
+  }
+});
+
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
 });
+
+app.listen(port, () => {
+  console.log(`Servidor corriendo en http://localhost:${port}`);
+});
+
