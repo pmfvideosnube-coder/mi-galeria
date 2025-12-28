@@ -4,10 +4,10 @@ const { Storage } = require("megajs");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ⚠️ Sustituye aquí tu correo y contraseña de MEGA
+// ⚠️ Sustituye aquí por tu correo y contraseña reales de MEGA
 const storage = new Storage({
-  email: "lemusdelapuertams123a@gmail.com",
-  password: "MSOS123a"
+  email: "TU_CORREO_MEGA",
+  password: "TU_CONTRASEÑA_MEGA"
 });
 
 app.get("/", (req, res) => {
