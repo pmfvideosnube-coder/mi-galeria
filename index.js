@@ -4,21 +4,23 @@ const { Storage } = require("megajs");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Conectar a tu carpeta pública de MEGA
-const storage = Storage.fromURL("https://mega.nz/folder/NQMngLCb#wn3HJYVEsrd_4kB-xQ9wCA");
+// Conectar a tu cuenta MEGA usando variables de entorno
+const storage = new Storage({
+  email: process.env.MEGA_EMAIL,     // aquí Render pondrá tu correo
+  password: process.env.MEGA_PASSWORD // aquí Render pondrá tu contraseña
+});
 
-// Galería pastel
 app.get("/", (req, res) => {
-  storage.load((err) => {
+  storage.login((err) => {
     if (err) {
-      console.error("Error cargando carpeta MEGA:", err);
-      return res.status(500).send("No se pudo acceder a la carpeta MEGA.");
+      console.error("Error al conectar con MEGA:", err);
+      return res.status(500).send("No se pudo acceder a MEGA.");
     }
 
     // Filtrar solo archivos de video
     const videos = storage.files.filter(f => f.name.endsWith(".mp4"));
 
-    // Construir HTML pastel
+    // Construir galería pastel
     let html = `
       <html>
       <head>
@@ -41,7 +43,6 @@ app.get("/", (req, res) => {
           <h3>${v.name}</h3>
           <video controls>
             <source src="${v.link()}" type="video/mp4">
-            Tu navegador no soporta video.
           </video>
         </div>
       `;
