@@ -5,7 +5,6 @@ const path = require("path");
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Autenticación con Google Drive usando el archivo secreto
 const auth = new google.auth.GoogleAuth({
   keyFile: path.join(__dirname, "service-account.json"),
   scopes: ["https://www.googleapis.com/auth/drive.readonly"],
@@ -103,6 +102,21 @@ app.get("/videos", async (req, res) => {
             font-size: 14px;
             color: var(--pastel-text);
           }
+
+          .fullscreen-btn {
+            margin-top: 8px;
+            padding: 6px 12px;
+            font-size: 14px;
+            background: var(--pastel-subtitle);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+          }
+
+          .fullscreen-btn:hover {
+            background: var(--pastel-title);
+          }
         </style>
       </head>
       <body>
@@ -113,14 +127,15 @@ app.get("/videos", async (req, res) => {
     `;
 
     files.forEach((file) => {
-      const videoUrl = `/stream/${file.id}`; // ✅ proxy interno
+      const videoUrl = `/stream/${file.id}`;
       html += `
         <div class="video-card" data-name="${file.name.toLowerCase()}">
           <h3>${file.name}</h3>
-          <video controls>
+          <video id="video-${file.id}" controls>
             <source src="${videoUrl}" type="video/mp4">
             Tu navegador no soporta video.
           </video>
+          <button class="fullscreen-btn" onclick="makeFullscreen('video-${file.id}')">Pantalla completa</button>
           <p>Subido: ${new Date(file.createdTime).toLocaleString()}</p>
         </div>
       `;
@@ -143,6 +158,17 @@ app.get("/videos", async (req, res) => {
               }
             });
           });
+
+          function makeFullscreen(videoId) {
+            const video = document.getElementById(videoId);
+            if (video.requestFullscreen) {
+              video.requestFullscreen();
+            } else if (video.webkitRequestFullscreen) {
+              video.webkitRequestFullscreen();
+            } else if (video.msRequestFullscreen) {
+              video.msRequestFullscreen();
+            }
+          }
         </script>
       </body>
       </html>
@@ -155,7 +181,7 @@ app.get("/videos", async (req, res) => {
   }
 });
 
-// ✅ Ruta proxy que pide el archivo a Drive y lo sirve al navegador
+// Proxy de streaming
 app.get("/stream/:id", async (req, res) => {
   try {
     const fileId = req.params.id;
