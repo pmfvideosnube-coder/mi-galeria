@@ -1,12 +1,18 @@
 {
-  "name": "mi-galeria",
+  "name": "galeria-pastel-mega",
   "version": "1.0.0",
+  "description": "Galería pastel automática con videos de MEGA",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
     "express": "^4.18.2",
-    "googleapis": "^131.0.0"
-  }
+    "megajs": "^1.3.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "author": "MSO",
+  "license": "MIT"
 }
